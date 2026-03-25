@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LED Control</title>
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: #f4f7fb;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 300px;
+            margin: auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .on {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .off {
+            background: #e74c3c;
+            color: white;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>💡 LED Control</h1>
+
+    <button class="on" onclick="turnOn()">ON</button>
+    <button class="off" onclick="turnOff()">OFF</button>
+
+    <p id="status">Status: OFF</p>
+</div>
+
+<script>
+function turnOn() {
+    document.getElementById("status").innerHTML = "Status: ON";
+    fetch("http://YOUR_ESP32_IP/on");
+}
+
+function turnOff() {
+    document.getElementById("status").innerHTML = "Status: OFF";
+    fetch("http://YOUR_ESP32_IP/off");
+}
+</script>
+
+</body>
+</html>

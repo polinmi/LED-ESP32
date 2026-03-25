@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Traffic Light</title>
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: #eef2f7;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 250px;
+            margin: auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .light {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 15px auto;
+            background: #ccc;
+            transition: 0.3s;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .start {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .stop {
+            background: #e74c3c;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🚦 Traffic Light</h2>
+
+    <div id="red" class="light"></div>
+    <div id="yellow" class="light"></div>
+    <div id="green" class="light"></div>
+
+    <button class="start" onclick="startTraffic()">Start</button>
+    <button class="stop" onclick="stopTraffic()">OFF</button>
+</div>
+
+<script>
+let timers = [];
+
+function setLight(r, y, g) {
+    document.getElementById("red").style.background = r;
+    document.getElementById("yellow").style.background = y;
+    document.getElementById("green").style.background = g;
+}
+
+function startTraffic() {
+    stopTraffic(); // para dili mag doble2
+
+    timers.push(setTimeout(() => {
+        setLight("red", "#ccc", "#ccc");
+        fetch("http://YOUR_ESP32_IP/red");
+    }, 0));
+
+    timers.push(setTimeout(() => {
+        setLight("#ccc", "#ccc", "green");
+        fetch("http://YOUR_ESP32_IP/green");
+    }, 5000));
+
+    timers.push(setTimeout(() => {
+        setLight("#ccc", "yellow", "#ccc");
+        fetch("http://YOUR_ESP32_IP/yellow");
+    }, 8000));
+
+    timers.push(setTimeout(() => {
+        startTraffic(); // loop balik
+    }, 10000));
+}
+
+function stopTraffic() {
+    // i-clear tanan timers
+    timers.forEach(t => clearTimeout(t));
+    timers = [];
+
+    // reset lights
+    setLight("#ccc", "#ccc", "#ccc");
+
+    // optional: off sa ESP32
+    fetch("http://YOUR_ESP32_IP/off");
+}
+</script>
+
+</body>
+</html>
